@@ -8,7 +8,7 @@ namespace API.Extensions
     // Extension method to add application services
     public static class ApplicationServiceExtensions
     {
-        public static IServiceCollection AddApplicationService(this IServiceCollection services, IConfiguration config)
+        public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration config)
         {
             // Adding DbContext with SQLite
             services.AddDbContext<DataContext>(opt =>
