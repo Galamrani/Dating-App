@@ -1,6 +1,4 @@
-﻿using API.DTOs;
-
-namespace API.Entites;
+﻿namespace API.Entites;
 
 public class AppUser
 {
