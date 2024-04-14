@@ -16,6 +16,12 @@
             </ul>
         </ng-container>
 
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+                <a class="nav-link" routerLink="/errors" routerLinkActive="active">Errors</a>
+            </li>
+        </ul>
+
         <div *ngIf="(accountService.currentUser$ | async)" class="dropdown" dropdown>
             <a class="dropdown-toggle text-light text-decoration-none" dropdownToggle>Welcome</a>
             <div class="dropdown-menu" *dropdownMenu>

@@ -1,8 +1,9 @@
 using API.Extensions;
+using API.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Add services to the container
 
 builder.Services.AddControllers();  // Adding controller services
 builder.Services.AddApplicationServices(builder.Configuration);  // Adding custom application services
@@ -10,7 +11,9 @@ builder.Services.AddIdentityServices(builder.Configuration); // Adding custom id
 
 var app = builder.Build();  // Building the application
 
-// Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline (middleware)
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
 app.UseAuthentication();
