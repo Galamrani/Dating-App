@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using API.Entites;
+using API.Entities;
 
 namespace API.Interfaces
 {

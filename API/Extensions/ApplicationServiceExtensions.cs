@@ -18,6 +18,12 @@ namespace API.Extensions
             services.AddCors(); // Adding CORS services
             services.AddScoped<ITokenService, TokenService>();  // Adding scoped token service
 
+            // allows other parts of the application to depend on IUserRepository abstraction and receive instances of UserRepository when needed.
+            services.AddScoped<IUserRepository, UserRepository>();
+
+            // Configuring AutoMapper to scan and register mappings from all assemblies in the current domain
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
             return services;    // Returning modified service collection
         }
     }
