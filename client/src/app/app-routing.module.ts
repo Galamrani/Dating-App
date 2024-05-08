@@ -14,15 +14,15 @@ import { NotFoundComponent } from './errors/not-found/not-found.component';
 const routes: Routes = [
   { path: "", component: HomeComponent },
   { path: "errors", component: TestErrorComponent },
-  { path: "not-found", component: NotFoundComponent},
-  { path: "server-error", component: ServerErrorComponent},
+  { path: "not-found", component: NotFoundComponent },
+  { path: "server-error", component: ServerErrorComponent },
   {
     path: "",
     runGuardsAndResolvers: "always",
     canActivate: [authGuard],
     children: [
       { path: "members", component: MemberListComponent },
-      { path: "members/:id", component: MemberDetailComponent },
+      { path: "members/:username", component: MemberDetailComponent },
       { path: "lists", component: ListsComponent, },
       { path: "messages", component: MessagesComponent },
     ]
