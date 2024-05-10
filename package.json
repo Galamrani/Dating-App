@@ -1,5 +1,10 @@
 {
   "dependencies": {
+    "@angular/material": "^17.3.8",
+    "@cloudinary/ng": "^2.0.2",
+    "@cloudinary/url-gen": "^1.19.0",
+    "@ngx-dropzone/cdk": "^17.3.0",
+    "@ngx-dropzone/material": "^17.3.0",
     "ngx-toastr": "^17.0.2"
   }
 }
