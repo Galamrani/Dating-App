@@ -35,9 +35,7 @@ export class PhotoEditorComponent {
     const formData = new FormData();
     formData.append('file', this.newPhotoFile);
 
-    const headers = new HttpHeaders({
-      'Authorization': 'Bearer ' + this.user?.token
-    });
+    const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + this.user?.token });
 
     return this.http.post<any>(this.baseUrl + 'users/add-photo', formData, { headers: headers })
   }
