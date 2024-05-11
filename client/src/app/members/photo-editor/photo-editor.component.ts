@@ -1,9 +1,12 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, Input } from '@angular/core';
-import { take } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
+import { catchError, map, take, tap, throwError } from 'rxjs';
 import { Member } from 'src/app/_models/member';
+import { Photo } from 'src/app/_models/photo';
 import { User } from 'src/app/_models/user';
 import { AccountService } from 'src/app/_services/account.service';
+import { MembersService } from 'src/app/_services/members.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -17,7 +20,7 @@ export class PhotoEditorComponent {
   user: User | undefined;
   baseUrl = environment.apiUrl;
 
-  constructor(private accountService: AccountService, private http: HttpClient) {
+  constructor(private accountService: AccountService, private http: HttpClient, private memberService: MembersService, private toastr: ToastrService) {
     this.accountService.currentUser$.pipe(take(1)).subscribe({
       next: user => {
         if (user) this.user = user
@@ -26,17 +29,19 @@ export class PhotoEditorComponent {
   }
 
   onFileSelected(event: any) {
+    console.log(event.target.files[0]);
     this.newPhotoFile = event.target.files[0];
   }
 
   uploadPhoto() {
-    if (!this.newPhotoFile || !this.user) return;
+    if (!this.newPhotoFile || !this.user || !this.member) return;
 
     const formData = new FormData();
     formData.append('file', this.newPhotoFile);
 
-    const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + this.user?.token });
-
-    return this.http.post<any>(this.baseUrl + 'users/add-photo', formData, { headers: headers })
+    this.memberService.updateMemberPhotos(this.member, formData).subscribe({
+      next: _ => this.toastr.success('Upload photo successfully'),
+    })
   }
+
 }

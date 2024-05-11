@@ -53,8 +53,6 @@ namespace API.Controllers
         [HttpPost("add-photo")]
         public async Task<ActionResult<PhotoDto>> AddPhoto(IFormFile file)
         {
-            System.Console.WriteLine("im here");
-
             var user = await this.userRepository.GetUserByUsernameAsync(User.GetUsername());
 
             if (user == null) return NotFound();

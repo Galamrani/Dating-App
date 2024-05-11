@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Member } from '../_models/member';
-import { map, of } from 'rxjs';
+import { catchError, map, of, take, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -36,6 +36,23 @@ export class MembersService {
         this.members[index] = { ...this.members[index], ...member }
       })
     )
+  }
+
+  updateMemberPhotos(member: Member, formData: FormData) {
+    return this.http.post<any>(this.baseUrl + 'users/add-photo', formData, { reportProgress: true })
+      .pipe(
+        take(1),
+        catchError(error => {
+          console.error('Upload failed:', error);
+          return error;
+        }),
+        map(response => {
+          if (member) {
+            member.photos.push(response);
+          }
+          return response;
+        })
+      );
   }
 
 }
