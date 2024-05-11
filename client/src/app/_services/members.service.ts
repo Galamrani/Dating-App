@@ -41,7 +41,6 @@ export class MembersService {
   updateMemberPhotos(member: Member, formData: FormData) {
     return this.http.post<any>(this.baseUrl + 'users/add-photo', formData, { reportProgress: true })
       .pipe(
-        take(1),
         catchError(error => {
           console.error('Upload failed:', error);
           return error;
@@ -53,6 +52,14 @@ export class MembersService {
           return response;
         })
       );
+  }
+
+  setMainPhoto(photoId: number) {
+    return this.http.put(this.baseUrl + 'users/set-main-photo/' + photoId, {});
+  }
+
+  deletePhoto(photoId: number) {
+    return this.http.delete(this.baseUrl + 'users/delete-photo/' + photoId);
   }
 
 }
