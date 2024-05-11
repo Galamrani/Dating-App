@@ -1,16 +1,46 @@
-
-
-<form #registerForm="ngForm" (ngSubmit)="register()" autocomplete="off">
+<form [formGroup]="registerForm" (ngSubmit)="registerForm.valid && register()" autocomplete="off">
     <h2 class="text-center text-primary">Sign up</h2>
     <hr>
     <div class="mb-3">
-        <input type="text" class="form-control" name="username"[(ngModel)]="model.username" placeholder="Username">
+        <label style="margin-right: 10px;">I am a: </label>
+        <label class="form-check-label">
+            <input type="radio" class="form-check-input" value="male" formControlName="gender"> Male
+        </label>
+        <label class="form-check-label">
+            <input type="radio" class="form-check-input ms-2" value="female" formControlName="gender"> female
+        </label>
     </div>
     <div class="mb-3">
-        <input type="text" class="form-control" name="password"[(ngModel)]="model.password" placeholder="Password">
+        <input type="text" class="form-control" formControlName="username" placeholder="Username"
+            [class.is-invalid]="registerForm.get('username')?.errors && registerForm.get('username')?.touched">
+            <div class="invalid-feedback">Please enter a username</div>
     </div>
+    <div class="mb-3">
+        <input type="text" class="form-control" formControlName="password" placeholder="Password"
+        [class.is-invalid]="registerForm.get('password')?.errors && registerForm.get('password')?.touched">
+        <div *ngIf="registerForm.get('password')?.hasError('register')" class="invalid-feedback">Please enter a password</div>
+        <div *ngIf="registerForm.get('password')?.hasError('minlength')" class="invalid-feedback">Must be at least 4 characters</div>
+        <div *ngIf="registerForm.get('password')?.hasError('maxlength')" class="invalid-feedback">Must be at most 8 characters</div>
+    </div>
+    <div class="mb-3">
+        <input type="text" class="form-control" formControlName="knownAs" placeholder="Known as"
+            [class.is-invalid]="registerForm.get('knownAs')?.errors && registerForm.get('knownAs')?.touched">
+            <div class="invalid-feedback">Please enter a known as</div>
+    </div>
+    <div class="mb-3">
+        <input type="date" class="form-control" formControlName="dateOfBirth" placeholder="Date of birth"
+            [class.is-invalid]="registerForm.get('dateOfBirth')?.errors && registerForm.get('dateOfBirth')?.touched">
+            <div class="invalid-feedback">Please enter a date of birth</div>
+    </div>
+
+    <div class="row" *ngIf="validationErrors">
+        <ul class="text-danger">
+            <li *ngFor="let error of validationErrors">{{error}}</li>
+        </ul>
+    </div>
+
     <div class="text-center">
-        <button class="btn btn-success me-2" type="submit">Register</button>
+        <button [disabled]="!registerForm.valid" class="btn btn-success me-2" type="submit">Register</button>
         <button class="btn btn-default" type="button" (click)="cancel()">Cancel</button>
     </div>
-</form>
+</form>  

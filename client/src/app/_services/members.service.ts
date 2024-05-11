@@ -14,7 +14,6 @@ export class MembersService {
   constructor(private http: HttpClient) { }
 
   getMembers() {
-    if (this.members.length > 0) return of(this.members);
     return this.http.get<Member[]>(this.baseUrl + 'users').pipe(
       map(members => {
         this.members = members;
@@ -45,11 +44,9 @@ export class MembersService {
           console.error('Upload failed:', error);
           return error;
         }),
-        map(response => {
-          if (member) {
-            member.photos.push(response);
-          }
-          return response;
+        map(photo => {
+          if (member) member.photos.push(photo);
+          return photo;
         })
       );
   }

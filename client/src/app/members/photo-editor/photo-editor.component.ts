@@ -38,11 +38,19 @@ export class PhotoEditorComponent {
 
     const formData = new FormData();
     formData.append('file', this.newPhotoFile);
-
+  
     this.memberService.updateMemberPhotos(this.member, formData).subscribe({
-      next: _ => this.toastr.success('Upload photo successfully'),
-    })
+      next: photo => {
+        if (photo.isMain && this.member && this.user) {
+          this.user.photoUrl = photo.url;
+          this.member.photoUrl = photo.url;
+          this.accountService.setCurrentUser(this.user);
+        }
+        this.toastr.success('Upload photo successfully');
+      }
+    });
   }
+  
 
   deletePhoto(photoId: number) {
     this.memberService.deletePhoto(photoId).subscribe({
