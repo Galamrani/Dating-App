@@ -11,25 +11,21 @@ namespace API.Extensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration config)
         {
-            // Adding DbContext with SQLite
             services.AddDbContext<DataContext>(opt =>
             {
                 opt.UseSqlite(config.GetConnectionString("DefaultConnection"));
             });
             services.AddCors();
-            services.AddScoped<ITokenService, TokenService>();  // Adding scoped token service
-
-            // allows other parts of the application to depend on IUserRepository abstraction and receive instances of UserRepository when needed.
+            services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IUserRepository, UserRepository>();
-
-            // Configuring AutoMapper to scan and register mappings from all assemblies in the current domain
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
             services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
             services.AddScoped<IPhotoService, PhotoService>();
             services.AddScoped<LogUserActivity>();
+            services.AddScoped<ILikesRepository, LikesRepository>();
 
-            return services;    // Returning modified service collection
+
+            return services;
         }
     }
 }
