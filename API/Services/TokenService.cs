@@ -25,7 +25,8 @@ namespace API.Services
             var claims = new List<Claim>
             {
                 // Add the username as a claim
-                new Claim(JwtRegisteredClaimNames.NameId, user.UserName)
+                new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString()),
+                new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName),
             };
 
             // Create the credentials needed to sign the token

@@ -16,7 +16,7 @@ namespace API.Extensions
             {
                 opt.UseSqlite(config.GetConnectionString("DefaultConnection"));
             });
-            services.AddCors(); // Adding CORS services
+            services.AddCors();
             services.AddScoped<ITokenService, TokenService>();  // Adding scoped token service
 
             // allows other parts of the application to depend on IUserRepository abstraction and receive instances of UserRepository when needed.
@@ -27,6 +27,7 @@ namespace API.Extensions
 
             services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
             services.AddScoped<IPhotoService, PhotoService>();
+            services.AddScoped<LogUserActivity>();
 
             return services;    // Returning modified service collection
         }
