@@ -1,15 +1,21 @@
 using System.Text;
+using API.Data;
+using API.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
 namespace API.Extensions
 {
     public static class IdentityServiceExtensions
     {
-        // Extension method to add identity services
         public static IServiceCollection AddIdentityServices(this IServiceCollection services, IConfiguration config)
         {
-            // Adding JWT authentication
+            services.AddIdentityCore<AppUser>(opt => opt.Password.RequireNonAlphanumeric = false)
+                .AddRoles<AppRole>()
+                .AddRoleManager<RoleManager<AppRole>>()
+                .AddEntityFrameworkStores<DataContext>();
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(Options =>
             {
                 Options.TokenValidationParameters = new TokenValidationParameters
@@ -21,7 +27,7 @@ namespace API.Extensions
                 };
             });
 
-            return services;    // Returning modified service collection
+            return services;
         }
     }
 }
