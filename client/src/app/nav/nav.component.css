@@ -4,7 +4,11 @@
 }
 
 .img {
-    max-height: 50px;
+    max-height: 40px;
+    max-width: 40px;
     border: 2px solid white;
     display: inline;
+    margin-right: 10px;  
+    border-radius: 50%;
 }
+

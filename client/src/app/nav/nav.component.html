@@ -11,7 +11,7 @@
                     <a class="nav-link" routerLink="/lists" routerLinkActive="active">Lists</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" routerLink="/massages" routerLinkActive="active">Massages</a>
+                    <a class="nav-link" routerLink="/messages" routerLinkActive="active">Messages</a>
                 </li>
             </ul>
         </ng-container>
@@ -23,6 +23,7 @@
         </ul>
 
         <div *ngIf="accountService.currentUser$ | async as currentUser" class="dropdown" dropdown>
+            <img src="{{currentUser.photoUrl || './assets/user.png'}}" alt="img of user" class="img">
             <a class="dropdown-toggle text-light text-decoration-none" dropdownToggle>Welcome
                 {{currentUser.userName}}</a>
             <div class="dropdown-menu" *dropdownMenu>
