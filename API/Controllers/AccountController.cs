@@ -5,6 +5,7 @@ using API.DTOs;
 using API.Entities;
 using API.Interfaces;
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,15 +13,15 @@ namespace API.Controllers
 {
     public class AccountController : BaseApiController
     {
-        private readonly DataContext context;
         private readonly ITokenService tokenService;
         private readonly IMapper mapper;
+        private readonly UserManager<AppUser> userManager;
 
-        public AccountController(DataContext context, ITokenService tokenService, IMapper mapper)
+        public AccountController(ITokenService tokenService, IMapper mapper, UserManager<AppUser> userManager)
         {
+            this.userManager = userManager;
             this.tokenService = tokenService;
             this.mapper = mapper;
-            this.context = context;
         }
 
         [HttpPost("register")]
@@ -33,8 +34,9 @@ namespace API.Controllers
 
             user.UserName = registerDto.Username.ToLower();
 
-            this.context.Users.Add(user);
-            await this.context.SaveChangesAsync();
+            var result = await this.userManager.CreateAsync(user, registerDto.Password);
+
+            if (!result.Succeeded) return BadRequest(result.Errors);
 
             return new UserDto
             {
@@ -48,11 +50,15 @@ namespace API.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
-            var user = await this.context.Users
+            var user = await this.userManager.Users
                 .Include(p => p.Photos)
                 .FirstOrDefaultAsync(x => x.UserName == loginDto.Username);
 
             if (user == null) return Unauthorized("invalid username");
+
+            var result = await this.userManager.CheckPasswordAsync(user, loginDto.Password);
+
+            if (!result) return Unauthorized("Invalid password");
 
             return new UserDto
             {
@@ -66,7 +72,7 @@ namespace API.Controllers
 
         private async Task<bool> UserExists(string userName)
         {
-            return await this.context.Users.AnyAsync(x => x.UserName == userName.ToLower());
+            return await this.userManager.Users.AnyAsync(x => x.UserName == userName.ToLower());
         }
 
     }
