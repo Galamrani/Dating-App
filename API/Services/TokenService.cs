@@ -3,48 +3,44 @@ using System.Security.Claims;
 using System.Text;
 using API.Entities;
 using API.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
 namespace API.Services
 {
     public class TokenService : ITokenService
     {
-        // secret key used to create and validate tokens
         private readonly SymmetricSecurityKey key;
+        private readonly UserManager<AppUser> userManager;
 
-        // receives a configuration object to get the secret key
-        public TokenService(IConfiguration config)
+        public TokenService(IConfiguration config, UserManager<AppUser> userManager)
         {
-            // Get the secret key from configuration and convert it to bytes
-            // Then assign it to the 'key' field
+            this.userManager = userManager;
             this.key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["TokenKey"]));
         }
-        public string CreateToken(AppUser user)
+        public async Task<string> CreateToken(AppUser user)
         {
-            // Define the claims for the token
             var claims = new List<Claim>
             {
-                // Add the username as a claim
                 new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName),
             };
 
-            // Create the credentials needed to sign the token
+            var roles = await this.userManager.GetRolesAsync(user);
+
+            claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
+
             var creds = new SigningCredentials(this.key, SecurityAlgorithms.HmacSha512Signature);
 
-            // Define the properties of the token
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(claims), // Set the information about the user (claims) 
-                Expires = DateTime.Now.AddDays(7), // Set the expiration time 
-                SigningCredentials = creds // Set the credentials needed to sign the token
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.Now.AddDays(7),
+                SigningCredentials = creds
             };
 
-            // Create a token handler
             var tokenHandler = new JwtSecurityTokenHandler();
-            // Generate the token based on the token descriptor
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            // Convert the token to a string and return it
             return tokenHandler.WriteToken(token);
         }
     }

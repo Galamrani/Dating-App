@@ -6,6 +6,7 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 
 
@@ -20,6 +21,7 @@ import { ButtonsModule } from 'ngx-bootstrap/buttons';
     NgxSpinnerModule.forRoot({ type: "square-jelly-box" }),
     PaginationModule.forRoot(),
     ButtonsModule.forRoot(),
+    ModalModule.forRoot(),
   ],
   exports: [
     BsDropdownModule, 
@@ -28,6 +30,7 @@ import { ButtonsModule } from 'ngx-bootstrap/buttons';
     NgxSpinnerModule,
     PaginationModule,
     ButtonsModule,
+    ModalModule,
   ]
 })
 export class SharedModule { }

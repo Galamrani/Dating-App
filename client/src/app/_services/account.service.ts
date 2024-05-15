@@ -28,8 +28,6 @@ export class AccountService {
   }
 
   private handleResponse(observable: Observable<User>): Observable<void> {
-    // Using the pipe operator to chain the observable for data transformation
-    // Using the map to extract user data from the response
     return observable.pipe(
       map(user => {
         if (user) {
@@ -46,6 +44,14 @@ export class AccountService {
   }
 
   setCurrentUser(user: User) {
+    user.roles = [];
+    const roles = this.getDecodeedToken(user.token).role;
+    Array.isArray(roles) ? user.roles = roles : user.roles.push(roles);
+    localStorage.setItem('user', JSON.stringify(user));
     this.currentUser.next(user);
+  }
+
+  getDecodeedToken(token: string) {
+    return JSON.parse(atob(token.split('.')[1]));
   }
 }
