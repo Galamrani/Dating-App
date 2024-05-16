@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, map } from 'rxjs';
 import { User } from '../_models/user';
 import { environment } from 'src/environments/environment';
+import { PresenceService } from './presence.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class AccountService {
   // Read-only observable, components and services can subscribe for updates, but cannot modify its.
   currentUser$ = this.currentUser.asObservable();
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private presenceService: PresenceService) { }
 
   login(model: User) {
     return this.handleResponse(this.http.post<User>(this.baseUrl + "account/login", model))
@@ -41,6 +42,7 @@ export class AccountService {
   logout() {
     this.currentUser.next(null);
     localStorage.removeItem("user");
+    this.presenceService.stopHubConnection();
   }
 
   setCurrentUser(user: User) {
@@ -49,6 +51,7 @@ export class AccountService {
     Array.isArray(roles) ? user.roles = roles : user.roles.push(roles);
     localStorage.setItem('user', JSON.stringify(user));
     this.currentUser.next(user);
+    this.presenceService.createHubConnection(user);
   }
 
   getDecodeedToken(token: string) {

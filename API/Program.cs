@@ -2,27 +2,28 @@ using API.Data;
 using API.Entities;
 using API.Extensions;
 using API.Middleware;
+using API.SignalR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container
 
-builder.Services.AddControllers();  // Adding controller services
-builder.Services.AddApplicationServices(builder.Configuration);  // Adding custom application services
-builder.Services.AddIdentityServices(builder.Configuration); // Adding custom identity services
+builder.Services.AddControllers();
+builder.Services.AddApplicationServices(builder.Configuration);
+builder.Services.AddIdentityServices(builder.Configuration);
 
-var app = builder.Build();  // Building the application
+var app = builder.Build();
 
-// Configure the HTTP request pipeline (middleware)
 
 app.UseMiddleware<ExceptionMiddleware>();
 
-app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
+app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("https://localhost:4200"));
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.MapHub<PresenaceHub>("hubs/presence");
+app.MapHub<MessageHub>("hubs/message");
 
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
