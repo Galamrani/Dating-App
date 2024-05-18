@@ -4,7 +4,11 @@
             No messages yet...
         </div>
 
-        <ul class="chat" *ngIf="(messageService.messageThread$ | async)!.length > 0">
+        <ul 
+            #scrollMe
+            style="overflow: scroll; height: 500px;"
+            [scrollTop]="scrollMe.scrollHeight"
+            class="chat" *ngIf="(messageService.messageThread$ | async)!.length > 0">
             <li *ngFor="let message of (messageService.messageThread$ | async)">
                 <div>
                     <span class="chat-img float-end">
