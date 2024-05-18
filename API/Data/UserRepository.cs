@@ -69,10 +69,6 @@ namespace API.Data
                 .Include(p => p.Photos)
                 .ToListAsync();
         }
-        public async Task<bool> SaveAllAsync()
-        {
-            return await this.context.SaveChangesAsync() > 0;
-        }
 
         public void Update(AppUser user)
         {
