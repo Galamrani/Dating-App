@@ -18,6 +18,11 @@ namespace API.Data
             this.context = context;
         }
 
+        public void AddGroup(Group group)
+        {
+            this.context.Groups.Add(group);
+        }
+
         public void AddMessage(Message message)
         {
             this.context.Messages.Add(message);
@@ -28,9 +33,21 @@ namespace API.Data
             this.context.Messages.Remove(message);
         }
 
+        public async Task<Connection> GetConnection(string connectionId)
+        {
+            return await this.context.Connections.FindAsync(connectionId);
+        }
+
         public async Task<Message> GetMessage(int id)
         {
             return await this.context.Messages.FindAsync(id);
+        }
+
+        public async Task<Group> GetMessageGroup(string groupName)
+        {
+            return await this.context.Groups
+                .Include(x => x.Connections)
+                .FirstOrDefaultAsync(x => x.Name == groupName);
         }
 
         public async Task<PageList<MessageDto>> GetMessagesForUser(MessageParams messageParams)
@@ -78,6 +95,11 @@ namespace API.Data
             }
 
             return this.mapper.Map<IEnumerable<MessageDto>>(messages);
+        }
+
+        public void RemoveConnection(Connection connection)
+        {
+            this.context.Connections.Remove(connection);
         }
 
         public async Task<bool> SaveAllAsync()

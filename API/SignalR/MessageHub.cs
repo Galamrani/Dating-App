@@ -1,4 +1,3 @@
-using System.Text.RegularExpressions;
 using API.DTOs;
 using API.Entities;
 using API.Extensions;
@@ -15,8 +14,11 @@ namespace API.SignalR
         private readonly IMessageRepository messageRepository;
         private readonly IUserRepository userRepository;
         private readonly IMapper mapper;
-        public MessageHub(IMessageRepository messageRepository, IUserRepository userRepository, IMapper mapper)
+        private readonly IHubContext<PresenaceHub> PresenaceHub;
+        public MessageHub(IMessageRepository messageRepository, IUserRepository userRepository,
+            IMapper mapper, IHubContext<PresenaceHub> presenaceHub)
         {
+            this.PresenaceHub = presenaceHub;
             this.mapper = mapper;
             this.userRepository = userRepository;
             this.messageRepository = messageRepository;
@@ -28,15 +30,17 @@ namespace API.SignalR
             var otherUser = httpContext.Request.Query["user"];
             var groupName = GetGroupName(Context.User.GetUsername(), otherUser);
             await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
+            await AddToGroup(groupName);
 
             var messages = await this.messageRepository.GetMessageThread(Context.User.GetUsername(), otherUser);
 
             await Clients.Group(groupName).SendAsync("ReceiveMessageThread", messages);
         }
 
-        public override Task OnDisconnectedAsync(Exception exception)
+        public override async Task OnDisconnectedAsync(Exception exception)
         {
-            return base.OnDisconnectedAsync(exception);
+            await RemoveFromMessageGroup();
+            await base.OnDisconnectedAsync(exception);
         }
 
         public async Task SendMessage(CreateMessageDto createMessageDto)
@@ -59,12 +63,29 @@ namespace API.SignalR
                 Content = createMessageDto.Content,
             };
 
+            var groupName = GetGroupName(sender.UserName, recipient.UserName);
+
+            var group = await this.messageRepository.GetMessageGroup(groupName);
+
+            if (group.Connections.Any(x => x.UserName == recipient.UserName))
+            {
+                message.DateRead = DateTime.UtcNow;
+            }
+            else
+            {
+                var connections = await PresenceTracker.GetConnectionsForUser(recipient.UserName);
+                if (connections != null)
+                {
+                    await this.PresenaceHub.Clients.Clients(connections).SendAsync("NewMessageReceivd",
+                        new { username = sender.UserName, knownAs = sender.KnownAs });
+                }
+            }
+
             this.messageRepository.AddMessage(message);
 
             if (await this.messageRepository.SaveAllAsync())
             {
-                var group = GetGroupName(sender.UserName, recipient.UserName);
-                await Clients.Group(group).SendAsync("NewMessage", this.mapper.Map<MessageDto>(message));
+                await Clients.Group(groupName).SendAsync("NewMessage", this.mapper.Map<MessageDto>(message));
             }
 
             throw new HubException("Fialed to send message");
@@ -74,6 +95,29 @@ namespace API.SignalR
         {
             var stringCompare = string.CompareOrdinal(caller, other) < 0;
             return stringCompare ? $"{caller}-{other}" : $"{other}-{caller}";
+        }
+
+        private async Task<bool> AddToGroup(string groupName)
+        {
+            var group = await this.messageRepository.GetMessageGroup(groupName);
+            var connection = new Connection(Context.ConnectionId, Context.User.GetUsername());
+
+            if (group == null)
+            {
+                group = new Group(groupName);
+                this.messageRepository.AddGroup(group);
+            }
+
+            group.Connections.Add(connection);
+
+            return await this.messageRepository.SaveAllAsync();
+        }
+
+        private async Task RemoveFromMessageGroup()
+        {
+            var connection = await this.messageRepository.GetConnection(Context.ConnectionId);
+            this.messageRepository.RemoveConnection(connection);
+            await this.messageRepository.SaveAllAsync();
         }
     }
 }
