@@ -89,8 +89,6 @@ namespace API.SignalR
             {
                 await Clients.Group(groupName).SendAsync("NewMessage", this.mapper.Map<MessageDto>(message));
             }
-
-            throw new HubException("Fialed to send message");
         }
 
         private string GetGroupName(string caller, string other)
