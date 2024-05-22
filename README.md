@@ -1,19 +1,17 @@
 # DatingApp
 
-A .NET Web API project with an Angular client app, functioning as a dating app similar to Tinder, offering many features.
+DatingApp is a full-stack web application similar to Tinder, with various cool features. 
+It enables users to create profiles, browse other profiles, like users, match with them, and communicate via real-time messaging. 
+The backend is built with .NET Web API, and the frontend is developed using Angular.
 
 ## Table of Contents
 
-- [Introduction](#introduction)
 - [Features](#features)
 - [Tech Stack](#tech-stack)
 - [Usage](#usage)
-- [Prerequisites](#Prerequisites)
-- [System Architecture](#System Architecture)
+- [Prerequisites](#prerequisites)
+- [System Architecture](#system-architecture)
 
-## Introduction
-
-DatingApp is a full-stack web application that allows users to create profiles, browse other profiles, like other users, match with other users, and communicate via real-time messaging. The backend is built with .NET Web API, and the frontend is developed using Angular.
 
 ## Features
 
