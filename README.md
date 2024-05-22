@@ -24,7 +24,7 @@ The backend is built with .NET Web API, and the frontend is developed using Angu
 
 ## Tech Stack
 
-- **Frontend:** Angular, TypeScript, JavaScript
+- **Frontend:** Angular, TypeScript, JavaScript, HTML, CSS
 - **Backend:** .NET Web API, C#
 - **Database:** SQLite (for development), PostgreSQL (for production)
 - **Authentication:** JWT (JSON Web Tokens)
