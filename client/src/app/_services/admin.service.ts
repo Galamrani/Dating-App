@@ -15,6 +15,10 @@ export class AdminService {
     return this.http.get<User[]>(this.baseUrl + 'admin/users-with-roles');
   }
 
+  deleteUser(username: string) {
+    return this.http.delete<string>(this.baseUrl + 'admin/remove-user/' + username);
+  }
+
   updateUserRoles(username: string, roles: string[]) {
     const params = new HttpParams().set('roles', roles.join(','));
     return this.http.post<string[]>(`${this.baseUrl}admin/edit-roles/${username}`, {}, { params });

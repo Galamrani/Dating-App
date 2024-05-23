@@ -3,6 +3,7 @@ import { User } from 'src/app/_models/user';
 import { AdminService } from 'src/app/_services/admin.service';
 import { RolesModalComponent } from 'src/app/modals/roles-modal/roles-modal.component';
 import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-user-management',
@@ -14,7 +15,7 @@ export class UserManagementComponent implements OnInit {
   bsModalRef: BsModalRef<RolesModalComponent> = new BsModalRef<RolesModalComponent>();
   availableRoles = ['Admin', 'Moderator', 'Member'];
 
-  constructor (private adminService: AdminService, private modalService: BsModalService) {}
+  constructor (private adminService: AdminService, private modalService: BsModalService, private toastr: ToastrService) {}
   
   ngOnInit(): void {
     this.getUsersWithRoles();
@@ -45,6 +46,19 @@ export class UserManagementComponent implements OnInit {
           });
         }
       }
+    });
+  }
+
+  deleteUser(user: User) {
+    this.adminService.deleteUser(user.userName).subscribe({
+      next: _ => this.toastr.info("Successfully remove user"),
+      error: error => {
+        if (error.status === 404) {
+          this.toastr.error("User not found");
+        } else {
+          this.toastr.error("Failed to delete user. Please try again later.");
+        }
+      }    
     });
   }
 

@@ -18,9 +18,11 @@
     <div class="mb-3">
         <input type="text" class="form-control" formControlName="password" placeholder="Password"
         [class.is-invalid]="registerForm.get('password')?.errors && registerForm.get('password')?.touched">
-        <div *ngIf="registerForm.get('password')?.hasError('register')" class="invalid-feedback">Please enter a password</div>
-        <div *ngIf="registerForm.get('password')?.hasError('minlength')" class="invalid-feedback">Must be at least 4 characters</div>
+        <div class="invalid-feedback">Please enter a password</div>
+        <div *ngIf="registerForm.get('password')?.hasError('minlength')" class="invalid-feedback">Must be at least 6 characters</div>
         <div *ngIf="registerForm.get('password')?.hasError('maxlength')" class="invalid-feedback">Must be at most 8 characters</div>
+        <div *ngIf="registerForm.get('password')?.hasError('requireUppercase')" class="invalid-feedback">Password must contain at least one uppercase letter</div>
+        <div *ngIf="registerForm.get('password')?.hasError('requireNumber')" class="invalid-feedback">Password must contain at least one number</div>
     </div>
     <div class="mb-3">
         <input type="text" class="form-control" formControlName="knownAs" placeholder="Known as"

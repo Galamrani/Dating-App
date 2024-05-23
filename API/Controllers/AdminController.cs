@@ -60,6 +60,23 @@ namespace API.Controllers
             return Ok(await this.userManager.GetRolesAsync(user));
         }
 
+        [Authorize(Policy = "RequiredAdminRole")]
+        [HttpDelete("remove-user/{username}")]
+        public async Task<ActionResult> RemoveUser(string username)
+        {
+            var user = await this.userManager.FindByNameAsync(username);
+
+            if (user == null)
+                return NotFound("User not found");
+
+            var result = await this.userManager.DeleteAsync(user);
+
+            if (!result.Succeeded)
+                return BadRequest("Failed to delete user");
+
+            return Ok();
+        }
+
         [Authorize(Policy = "ModeratePhotoRole")]
         [HttpGet("photos-to-moderate")]
         public ActionResult GetPhotosForModeration()

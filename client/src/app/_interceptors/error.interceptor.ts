@@ -61,6 +61,19 @@ export class ErrorInterceptor implements HttpInterceptor {
   }
 
   private handle400Error(error: HttpErrorResponse) {
+    if (error.error && error.error.errors) {
+      const modelStateErrors: string[] = Object.values(error.error.errors).flat().map((value: unknown) => String(value));
+      modelStateErrors.forEach((errorDescription: string) => {
+        this.toastr.error(errorDescription, 'Error');
+      });
+    } else {
+      this.toastr.error('An unexpected error occurred.', 'Error');
+    }
+  }
+  
+  
+
+  private handle400Errors(error: HttpErrorResponse) {
     if (error.error.errors) {
       const modelStateErrors = [];
       for (const key in error.error.errors) {
@@ -75,3 +88,5 @@ export class ErrorInterceptor implements HttpInterceptor {
     }
   }
 }
+
+
