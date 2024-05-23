@@ -78,4 +78,4 @@ catch (Exception e)
     logger.LogError(e, "error during migration");
 }
 
-app.Run();
+app.Run("http://0.0.0.0:8080");
