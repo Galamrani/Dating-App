@@ -1,0 +1,30 @@
+# fly.toml app configuration file generated for dating-appv1 on 2024-05-23T10:11:56+03:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'dating-appv1'
+primary_region = 'ams'
+
+[build]
+  image = 'galamrani/dating-app:latest'
+
+
+[env]
+  ASPNETCORE_URLS="http://+:8080"
+  CloudinarySettings__CloudName="dngajczdy"
+  CloudinarySettings__ApiKey="598162762768371"
+
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+[[vm]]
+  memory = '1gb'
+  cpu_kind = 'shared'
+  cpus = 1
