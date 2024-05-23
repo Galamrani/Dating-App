@@ -4,12 +4,14 @@ DatingApp is a full-stack web application similar to Tinder, with various cool f
 It enables users to create profiles, browse other profiles, like users, match with them, and communicate via real-time messaging.  
 The backend is built with .NET Web API, and the frontend is developed using Angular.
 
+## Deployed Application
+
+The application is currently deployed and can be accessed at the following URL: [https://dating-appv1.fly.dev/](https://dating-appv1.fly.dev/)
+
 ## Table of Contents
 
 - [Features](#features)
 - [Tech Stack](#tech-stack)
-- [Usage](#usage)
-- [Prerequisites](#prerequisites)
 - [System Architecture](#system-architecture)
 
 ## Features
@@ -32,16 +34,6 @@ The backend is built with .NET Web API, and the frontend is developed using Angu
 - **Identity Management:** ASP.NET Identity Framework
 - **Photo Storage:** Cloudinary API
 
-## Usage
+## System Architecture
 
-Im currently working on a way to deploy the app to the web using some web host.
-
-### Prerequisites
-
-- .NET SDK
-- Node.js and npm
-- PostgreSQL
-
-### System Architecture
-
-Im in the process of creating UML diagrams that will show the interactions between various components, the design patterns used, and other critical aspects of the system architecture.
+Im in the process of creating UML diagrams that will show the interactions between various components, design patterns used, and other critical aspects of the system architecture.
