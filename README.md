@@ -2,7 +2,7 @@
 
 DatingApp is a full-stack web application similar to Tinder, with various cool features.  
 It enables users to create profiles, browse other profiles, like users, match with them, and communicate via real-time messaging.  
-The backend is built with .NET Web API, and the frontend is developed using Angular.  
+The backend is built with .NET Web API, and the frontend is developed using Angular.
 
 ## Table of Contents
 
@@ -11,7 +11,6 @@ The backend is built with .NET Web API, and the frontend is developed using Angu
 - [Usage](#usage)
 - [Prerequisites](#prerequisites)
 - [System Architecture](#system-architecture)
-
 
 ## Features
 
@@ -36,25 +35,6 @@ The backend is built with .NET Web API, and the frontend is developed using Angu
 ## Usage
 
 Im currently working on a way to deploy the app to the web using some web host.
-For now, you can run the app locally by following the instructions below.
-
-```bash
-# Clone the repository
-
-git clone https://github.com/yourusername/DatingApp.git
-
-# Navigate to the API project folder
-
-cd DatingApp/API
-
-# Run the application
-
-dotnet run
-
-# Open your browser and go to localhost to use the app
-
-https://localhost:5001 or http://localhost:5000
-```
 
 ### Prerequisites
 
