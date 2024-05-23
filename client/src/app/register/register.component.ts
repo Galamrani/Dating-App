@@ -40,7 +40,7 @@ export class RegisterComponent implements OnInit {
         this.router.navigateByUrl('/members').then(() => {
           setTimeout(() => {
             window.location.reload();
-          }, 2000); 
+          }, 500); 
         });
       },
       error: error => {
