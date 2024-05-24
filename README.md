@@ -5,7 +5,7 @@ It enables users to create profiles, browse other profiles, like users, match wi
 
 ## Deployed Application
 
-The backend is developed using .NET Web API, and the frontend is built with Angular.
+The backend is developed using .NET Web API, and the frontend is built with Angular.  
 The app is currently deployed and can be accessed at the following URL: [https://dating-appv1.fly.dev/](https://dating-appv1.fly.dev/)
 
 ## Table of Contents
