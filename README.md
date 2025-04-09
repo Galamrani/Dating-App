@@ -10,10 +10,6 @@ DatingApp is a full-stack web application similar to Tinder, with various cool f
 - Like profiles and match with other users.
 - Send and receive private messages in real-time.
 
-## Deployed Application
-
-The application is currently deployed and can be accessed at the following URL: [https://dating-appv1.fly.dev/](https://dating-appv1.fly.dev/)
-
 ## Features
 
 - **User Authentication and Authorization**: Secure login and registration using JWT authentication.
